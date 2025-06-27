@@ -1,12 +1,12 @@
 {
   "type": "module",
   "name": "helldb",
-  "version": "1.0.0",
-  "description": "A database for psychos",
+  "version": "1.0.1",
+  "description": "A JSON-based database tool for psychos",
   "main": "helldb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "0Stormy",
+  "author": "0Stormy, delusions",
   "license": "MIT"
 }
