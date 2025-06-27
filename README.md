@@ -4,7 +4,7 @@ hellDB is a database that only uses json.
 
 example:
 
-```json
+```js
 import { addValue } from "./helldb.js";
 
 addValue("example", 2);
