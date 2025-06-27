@@ -1,6 +1,6 @@
-# hellDB, a database for psychos
+<img src=".github/logo.svg" width="100%">
 
-hellDB is a database that only uses json.
+A database that only uses json.
 
 example:
 
