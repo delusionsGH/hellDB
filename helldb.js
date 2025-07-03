@@ -1,10 +1,7 @@
 import fs from 'node:fs';
 
-function createDB(db) {
-    fs.writeFileSync(db, '{}', (err) => {
-        if (err) throw err;
-        console.log('Created database | ', db);
-    });
+function createDB(db, initialStructure = {}) {
+    fs.writeFileSync(db, JSON.stringify(initialStructure, null, 2));
 }
 
 function getDB(db) {
@@ -17,45 +14,39 @@ function getDB(db) {
         return parsedData;
     } catch (err) {
         console.error(err);
-    }   
+    }
 }
 
 function writeDB(db, write) {
     if (!fs.existsSync(db)) {
         createDB(db);
     }
-    fs.writeFileSync(db, write, function(err) {
-        if(err) {
+    fs.writeFileSync(db, write, function (err) {
+        if (err) {
             return console.log(err);
         }
-    }); 
+    });
 }
 
-function addValue(dbval, values) {
+function addValue(dbval, table, values) {
     const db = getDB(dbval);
-    for (let i = 0; i < values.length; i++) {
-    const key = Object.keys(values[i])[0];
-        const value = values[i][key];
-        db[key] = value;
-    }
+    if (!db[table]) db[table] = {};
+    Object.keys(values).forEach((field) => {
+        if (!db[table][field]) db[table][field] = [];
+        db[table][field].push(values[field]);
+    });
     const dbString = JSON.stringify(db, null, 2);
     writeDB(dbval, dbString);
 }
 
-function checkForVals(dbval, values) {
-    let choice;
+function checkForVals(dbval, table) {
     const db = getDB(dbval);
-    for (let i = 0; i < values.length; i++) {
-    const key = Object.keys(values[i])[0];
-        const value = values[i][key];
-        db[key] = value;
-        if (key !== "" && choice !== false) {
-            choice = true;
-        } else {
-            choice = false;
-        }
-    }
-    return choice;
+    return Object.prototype.hasOwnProperty.call(db, table);
 }
 
-export { addValue, createDB, checkForVals };
+function getTable(dbval, table) {
+    const db = getDB(dbval);
+    return db[table] || {};
+}
+
+export { createDB, getDB, writeDB, addValue, checkForVals, getTable };

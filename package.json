@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "helldb",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A JSON-based database tool for psychos",
   "main": "helldb.js",
   "scripts": {
