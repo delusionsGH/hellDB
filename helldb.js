@@ -23,17 +23,17 @@ function writeDB(db, write) {
     }
     fs.writeFileSync(db, write, function (err) {
         if (err) {
-            return console.log(err);
+            console.log(err);
         }
     });
 }
 
 function addValue(dbval, table, values) {
     const db = getDB(dbval);
-    if (!db[table]) db[table] = {};
-    Object.keys(values).forEach((field) => {
+    if (!db[table]) db[table] = {}; // values is an object - { field1: value1, field2: value2, ... }
+    Object.entries(values).forEach(([field, value]) => {
         if (!db[table][field]) db[table][field] = [];
-        db[table][field].push(values[field]);
+        db[table][field].push(value);
     });
     const dbString = JSON.stringify(db, null, 2);
     writeDB(dbval, dbString);
@@ -41,7 +41,8 @@ function addValue(dbval, table, values) {
 
 function checkForVals(dbval, table) {
     const db = getDB(dbval);
-    return Object.prototype.hasOwnProperty.call(db, table);
+    const result = Object.prototype.hasOwnProperty.call(db, table);
+    return result;
 }
 
 function getTable(dbval, table) {
@@ -49,4 +50,12 @@ function getTable(dbval, table) {
     return db[table] || {};
 }
 
-export { createDB, getDB, writeDB, addValue, checkForVals, getTable };
+function dropTable(dbval, table) {
+    const db = getDB(dbval);
+    if (db[table]) {
+        delete db[table];
+        writeDB(dbval, JSON.stringify(db, null, 2));
+    }
+}
+
+export { createDB, getDB, writeDB, addValue, checkForVals, getTable, dropTable };
